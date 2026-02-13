@@ -44,8 +44,8 @@
     "category": "Main Experiment",
     "title": "Selective DeLex-JSON on Llama-3.1-8B-Instruct (Primary Model)",
     "description": "Implement and evaluate the proposed Selective DeLex-JSON defense on the primary pre-registered model (Llama-3.1-8B-Instruct). Selective DeLex-JSON is a training-free schema-to-schema transformation applied before constrained decoding that: (1) strips non-semantic free-text schema fields (description, title, examples, default), and (2) replaces suspicious forced literals (enum/const strings matching the suspicion function) with short opaque placeholders (E0, E1, ...). The hypothesis is that by preventing contiguous natural-language payloads from entering the autoregressive context, CDA-style priming is broken while benign schemas with short identifiers remain intact.\n\nSuspicion function (pre-registered, frozen before evaluation): a literal is delexicalized if ANY of: length > 20 characters, contains whitespace, matches instruction-like regex patterns. Optional enhancement: Llama Guard safety classifier flags it as unsafe.\n\nThis experiment evaluates both safety (ASR reduction on HarmBench/StrongREJECT under EnumAttack) and utility (JSON validity, schema compliance, benign schema modification rate on JSONSchemaBench and IFEval).",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "DeLex-JSON defense fully implemented and evaluated on Llama-3.1-8B-Instruct. Safety: HarmBench ASR 0.0% (from 22.0%), StrongREJECT ASR (HB cls) 2.6%, StrongREJECT ASR (rubric) 0.3%, StrongREJECT score 0.0016 (from 0.103). 100% attack schema detection rate. Utility: JSON validity -0.7pp, schema compliance -1.1pp vs no defense. IFEval: 0% degradation. Benign FPR: 11.3% overall (0% on GlaiveAI-2K)."
   },
   {
     "index": 6,

@@ -1,0 +1,269 @@
+{
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "defense": "Selective DeLex-JSON",
+  "safety": {
+    "harmbench": {
+      "delex_json": {
+        "asr": 0.0,
+        "unsafe_count": 0,
+        "total": 159,
+        "schema_modification_rate": 1.0
+      },
+      "no_defense": {
+        "asr": 0.22012578616352202,
+        "unsafe_count": 35,
+        "total": 159
+      },
+      "input_guard": {
+        "asr": 0.03773584905660377,
+        "unsafe_count": 6,
+        "total": 159
+      },
+      "reject_only": {
+        "asr": 0.0,
+        "unsafe_count": 0,
+        "total": 159
+      },
+      "escape_hatch": {
+        "asr": 0.22012578616352202,
+        "unsafe_count": 35,
+        "total": 159
+      }
+    },
+    "strongreject_harmbench_cls": {
+      "delex_json": {
+        "asr": 0.025559105431309903,
+        "unsafe_count": 8,
+        "total": 313,
+        "schema_modification_rate": 1.0
+      },
+      "no_defense": {
+        "asr": 0.15335463258785942,
+        "unsafe_count": 48,
+        "total": 313
+      },
+      "input_guard": {
+        "asr": 0.02875399361022364,
+        "unsafe_count": 9,
+        "total": 313
+      },
+      "reject_only": {
+        "asr": 0.0,
+        "unsafe_count": 0,
+        "total": 313
+      },
+      "escape_hatch": {
+        "asr": 0.15335463258785942,
+        "unsafe_count": 48,
+        "total": 313
+      }
+    },
+    "strongreject_rubric": {
+      "delex_json": {
+        "score_mean": 0.001597444089456869,
+        "asr": 0.003194888178913738,
+        "total_scored": 313
+      },
+      "no_defense": {
+        "score_mean": 0.10303514376996806,
+        "asr": 0.14376996805111822,
+        "total_scored": 313
+      },
+      "input_guard": {
+        "score_mean": 0.024361022364217253,
+        "asr": 0.03194888178913738,
+        "total_scored": 313
+      },
+      "reject_only": {
+        "score_mean": 0.0,
+        "asr": 0.0,
+        "total_scored": 313
+      },
+      "escape_hatch": {
+        "score_mean": 0.09384984025559105,
+        "asr": 0.13738019169329074,
+        "total_scored": 313
+      }
+    }
+  },
+  "utility": {
+    "jsonschemabench": {
+      "delex_json": {
+        "json_validity_rate": 0.9522918615528532,
+        "schema_compliance_rate": 0.9298409728718429,
+        "total_schemas": 3207,
+        "total_errors": 443,
+        "modification_rate": 0.017149984409105083,
+        "per_subset": {
+          "Glaiveai2K": {
+            "total": 1707,
+            "errors": 1,
+            "non_error_count": 1706,
+            "json_valid_count": 1698,
+            "json_validity_rate": 0.9953106682297772,
+            "schema_compliant_count": 1660,
+            "schema_compliance_rate": 0.9730363423212193,
+            "modified_count": 0,
+            "modification_rate": 0.0
+          },
+          "Github_easy": {
+            "total": 1943,
+            "errors": 442,
+            "non_error_count": 1501,
+            "json_valid_count": 1356,
+            "json_validity_rate": 0.9033977348434377,
+            "schema_compliant_count": 1322,
+            "schema_compliance_rate": 0.8807461692205196,
+            "modified_count": 55,
+            "modification_rate": 0.03664223850766156
+          }
+        }
+      },
+      "no_defense": {
+        "json_validity_rate": 0.9590678219300867,
+        "schema_compliance_rate": 0.9411413205855991,
+        "total_schemas": 3347,
+        "total_errors": 303,
+        "per_subset": {
+          "Glaiveai2K": {
+            "total": 1707,
+            "errors": 1,
+            "non_error_count": 1706,
+            "json_valid_count": 1703,
+            "json_validity_rate": 0.9982415005861665,
+            "schema_compliant_count": 1673,
+            "schema_compliance_rate": 0.9806565064478312
+          },
+          "Github_easy": {
+            "total": 1943,
+            "errors": 302,
+            "non_error_count": 1641,
+            "json_valid_count": 1507,
+            "json_validity_rate": 0.9183424741011579,
+            "schema_compliant_count": 1477,
+            "schema_compliance_rate": 0.9000609384521633
+          }
+        }
+      },
+      "delta": {
+        "json_validity_pp": -0.6775960377233492,
+        "schema_compliance_pp": -1.130034771375621
+      }
+    },
+    "ifeval_json": {
+      "total_instances": 17,
+      "no_defense_json_valid_rate": 1.0,
+      "delex_json_valid_rate": 1.0,
+      "delex_schema_modified_rate": 0.0,
+      "json_valid_delta": 0.0
+    }
+  },
+  "overhead": {
+    "benign_schema_modification_rate": {
+      "overall": 0.11263456090651558,
+      "total_schemas": 8825,
+      "total_modified": 994,
+      "per_subset": {
+        "Glaiveai2K": {
+          "modification_rate": 0.0,
+          "total": 1707,
+          "modified": 0
+        },
+        "Github_easy": {
+          "modification_rate": 0.048378795676788475,
+          "total": 1943,
+          "modified": 94
+        },
+        "Github_medium": {
+          "modification_rate": 0.11133603238866396,
+          "total": 1976,
+          "modified": 220
+        },
+        "Github_hard": {
+          "modification_rate": 0.3282258064516129,
+          "total": 1240,
+          "modified": 407
+        },
+        "Kubernetes": {
+          "modification_rate": 0.1231203007518797,
+          "total": 1064,
+          "modified": 131
+        },
+        "Snowplow": {
+          "modification_rate": 0.034739454094292806,
+          "total": 403,
+          "modified": 14
+        },
+        "JsonSchemaStore": {
+          "modification_rate": 0.2601626016260163,
+          "total": 492,
+          "modified": 128
+        }
+      }
+    },
+    "trigger_reason_counts": {
+      "whitespace": 3053,
+      "length>20": 16090,
+      "regex:(?i)^(make|create|write|explain|describe|tell)\\b": 45
+    },
+    "total_suspicious_literals": 18428
+  },
+  "comparison_table": {
+    "columns": [
+      "Defense",
+      "HarmBench ASR",
+      "StrongREJECT ASR (HB cls)",
+      "StrongREJECT ASR (rubric)",
+      "StrongREJECT Score",
+      "JSON Validity Delta (pp)",
+      "Schema Compliance Delta (pp)"
+    ],
+    "rows": [
+      [
+        "No Defense",
+        "22.0%",
+        "15.3%",
+        "14.4%",
+        "0.1030",
+        "baseline",
+        "baseline"
+      ],
+      [
+        "Input Guard",
+        "3.8%",
+        "2.9%",
+        "3.2%",
+        "0.0244",
+        "N/A",
+        "N/A"
+      ],
+      [
+        "Reject-Only",
+        "0.0%",
+        "0.0%",
+        "0.0%",
+        "0.0000",
+        "N/A",
+        "N/A"
+      ],
+      [
+        "Escape-Hatch",
+        "22.0%",
+        "15.3%",
+        "13.7%",
+        "0.0938",
+        "N/A",
+        "N/A"
+      ],
+      [
+        "DeLex-JSON",
+        "0.0%",
+        "2.6%",
+        "0.3%",
+        "0.0016",
+        "-0.7",
+        "-1.1"
+      ]
+    ]
+  }
+}

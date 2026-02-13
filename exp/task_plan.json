@@ -36,8 +36,8 @@
     "category": "Baseline Experiment",
     "title": "Escape-Hatch Wrapper on Llama-3.1-8B-Instruct",
     "description": "Evaluate an escape-hatch defense that modifies the constrained decoding grammar to always allow the model to generate a refusal token sequence (e.g., 'I cannot' or 'I'm sorry') even when the JSON schema would otherwise force specific outputs. This tests whether preserving the model's ability to refuse within constrained decoding can mitigate control-plane jailbreaks.\n\nReference: \"Output Constraints as Attack Surface: Exploiting Structured Generation to Bypass LLM Safety Mechanisms\" (Defense Sketch 1: Refusal-Token Whitelisting) | https://arxiv.org/abs/2502.XXXXX\n\nThe escape-hatch approach modifies the constrained-decoding grammar to include a refusal alternative at the top level of the JSON schema, allowing the model to output a refusal object instead of the attack-specified schema.",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "Escape-hatch defense is completely ineffective: 0.0% model refusal rate on both HarmBench and StrongREJECT. ASR identical to no-defense baseline (HarmBench 22.0%, StrongREJECT 15.3%). StrongREJECT score 0.094. Benign false refusal rate 12.7% (significant utility cost with zero safety benefit). The forced enum values in constrained decoding dominate model behavior, preventing the model from choosing the refusal path."
   },
   {
     "index": 5,

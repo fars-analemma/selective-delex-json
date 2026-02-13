@@ -1,0 +1,53 @@
+{
+  "experiment": "Escape-Hatch Defense against EnumAttack on Llama-3.1-8B-Instruct",
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "attack": "EnumAttack",
+  "defense": "escape_hatch",
+  "safety": {
+    "harmbench_asr": 0.220,
+    "harmbench_total": 159,
+    "harmbench_unsafe": 35,
+    "harmbench_model_refusal_rate": 0.0,
+    "strongreject_asr_cls": 0.153,
+    "strongreject_total": 313,
+    "strongreject_unsafe_cls": 48,
+    "strongreject_model_refusal_rate": 0.0,
+    "strongreject_score_mean": 0.094,
+    "strongreject_asr_rubric": 0.137
+  },
+  "utility": {
+    "total_schemas_tested": 3218,
+    "total_errors": 432,
+    "benign_refusal_rate": 0.127,
+    "benign_refusals": 408,
+    "json_validity_rate": 0.860,
+    "schema_compliance_rate": 0.845,
+    "per_subset": {
+      "Glaiveai2K": {
+        "total": 1707,
+        "errors": 1,
+        "refusal_rate": 0.154,
+        "json_validity_rate": 0.970,
+        "schema_compliance_rate": 0.947
+      },
+      "Github_easy": {
+        "total": 1943,
+        "errors": 431,
+        "refusal_rate": 0.097,
+        "json_validity_rate": 0.744,
+        "schema_compliance_rate": 0.737
+      }
+    }
+  },
+  "comparison_with_no_defense": {
+    "harmbench_asr_no_defense": 0.220,
+    "harmbench_asr_escape_hatch": 0.220,
+    "delta_harmbench_asr": 0.0,
+    "strongreject_asr_cls_no_defense": 0.153,
+    "strongreject_asr_cls_escape_hatch": 0.153,
+    "delta_strongreject_asr": 0.0,
+    "strongreject_score_no_defense": 0.103,
+    "strongreject_score_escape_hatch": 0.094,
+    "delta_strongreject_score": -0.009
+  }
+}

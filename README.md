@@ -127,6 +127,11 @@ Cloned into `external/`:
 - `scripts/run_reject_only_eval.py`: HarmBench eval with schema-rejected handling
 - `scripts/run_reject_only_strongreject.py`: StrongREJECT eval with schema-rejected handling
 - `scripts/run_reject_only_full.sh`: Full reject-only pipeline
+- `scripts/run_escape_hatch_experiment.py`: Run EnumAttack with escape-hatch defense
+- `scripts/run_escape_hatch_utility.py`: Measure benign refusal/validity on JSONSchemaBench
+- `scripts/run_escape_hatch_eval.py`: HarmBench eval with model-refused handling
+- `scripts/run_escape_hatch_strongreject.py`: StrongREJECT eval with model-refused handling
+- `scripts/run_escape_hatch_full.sh`: Full escape-hatch pipeline
 
 ## Completed Experiments
 
@@ -167,3 +172,20 @@ Outputs: `outputs/input_guard_llama31/`, Results: `results/input_guard_llama31.j
 Per-subset benign FPR: Glaiveai2K 0.0%, Github_easy 1.4%, Github_medium 3.4%, Github_hard 10.8%, Kubernetes 12.2%, Snowplow 0.7%, JsonSchemaStore 5.1%. Dominant trigger: `length>20`.
 
 Outputs: `outputs/reject_only_llama31/`, Results: `results/reject_only_llama31.json`
+
+### Escape-Hatch Defense on Llama-3.1-8B-Instruct
+
+| Metric | Value |
+|--------|-------|
+| HarmBench Model Refusal Rate | 0.0% (0/159) |
+| HarmBench ASR | 22.0% (35/159) |
+| StrongREJECT Model Refusal Rate | 0.0% (0/313) |
+| StrongREJECT ASR (cls) | 15.3% (48/313) |
+| StrongREJECT Score | 0.094 |
+| Benign False Refusal Rate (JSONSchemaBench) | 12.7% (408/3218) |
+| JSON Validity (non-refusal) | 86.0% |
+| Schema Compliance (non-refusal) | 84.5% |
+
+Defense is completely ineffective: 0% model refusal rate, ASR identical to no-defense. Significant utility degradation (12.7% false refusals on benign schemas).
+
+Outputs: `outputs/escape_hatch_llama31/`, Results: `results/escape_hatch_llama31.json`

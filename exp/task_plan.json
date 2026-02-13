@@ -12,8 +12,8 @@
     "category": "Baseline Experiment",
     "title": "EnumAttack (No Defense) on Llama-3.1-8B-Instruct",
     "description": "Reproduce the EnumAttack (Constrained Decoding Attack) on Llama-3.1-8B-Instruct under our fixed constrained-decoding stack (vLLM with structured output) with no defense applied. This establishes the attack severity baseline \u2014 demonstrating high ASR that motivates defense development \u2014 and validates that our setup replicates the vulnerability documented in prior work. All subsequent defense baselines and the proposed method will be compared against these undefended results.\n\nReference: \"Output Constraints as Attack Surface: Exploiting Structured Generation to Bypass LLM Safety Mechanisms\" | https://arxiv.org/abs/2502.XXXXX (CDA paper)\n\nKey configuration: Llama-3.1-8B-Instruct served via vLLM (OpenAI-compatible server), temperature=0.6, max_model_len=3072. EnumAttack embeds the harmful question in a forced enum string within the JSON schema, plus an affirmative prefix enum to prime the model, with a free-text 'answer' field for the model to generate into.",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "EnumAttack (No Defense) baseline completed on Llama-3.1-8B-Instruct. Results: HarmBench ASR=22.0% (35/159), StrongREJECT ASR (classifier)=15.3% (48/313), StrongREJECT Score=0.103, StrongREJECT ASR (rubric)=14.4%. The attack demonstrates meaningful vulnerability (22% of harmful requests bypass safety) though Llama-3.1-8B-Instruct is more resilient than models in the CDA paper. Cybercrime prompts are most vulnerable (54.5% ASR). Results stored in results/no_defense_llama31.json and EXPERIMENT_RESULTS/no_defense_enum_attack_llama31/."
   },
   {
     "index": 2,

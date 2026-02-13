@@ -95,6 +95,37 @@ Cloned into `external/`:
 ## Datasets
 
 - **IFEval**: Downloaded to `data/ifeval/` (541 examples)
-- **HarmBench prompts**: Available in `external/HarmBench/`
+- **HarmBench prompts**: `data/harmbench_prompts.json` (159 standard behaviors from test split)
+- **StrongREJECT prompts**: `data/strongreject_prompts.json` (313 prompts, 6 categories)
 - **JSONSchemaBench**: Available in `external/jsonschemabench/`
-- **StrongREJECT**: Available in `external/strongreject/`
+
+## Implemented Attacks
+
+- **EnumAttack** (`attacks/enum_attack.py`): Embeds harmful question + affirmative prefix as forced enum values in JSON schema. Benign user prompt bypasses prompt auditing.
+
+## Evaluation Pipeline
+
+- `evaluation/field_extractor.py`: Extracts free-text (non-forced) fields from JSON model outputs
+- `evaluation/safety_eval.py`: ASR via HarmBench classifier (completions API, Llama-2 format)
+- `evaluation/strongreject_eval.py`: StrongREJECT rubric scoring via LLM-as-judge (LEMMA MaaS API)
+- HarmBench classifier uses `max_model_len=2048` (model limit)
+
+## Key Scripts
+
+- `scripts/run_enum_attack.py`: Run EnumAttack against a vLLM endpoint
+- `scripts/run_enum_attack_full.sh`: Full pipeline (serve model + run attack on both datasets)
+- `scripts/run_harmbench_eval.py`: Run HarmBench classifier on outputs
+- `scripts/run_safety_eval.sh`: Full HarmBench eval pipeline (serve classifier + evaluate)
+- `scripts/run_strongreject_eval.py`: Run StrongREJECT rubric scoring via API
+
+## Completed Experiments
+
+### EnumAttack (No Defense) on Llama-3.1-8B-Instruct
+
+| Metric | Value |
+|--------|-------|
+| HarmBench ASR | 22.0% (35/159) |
+| StrongREJECT ASR (cls) | 15.3% (48/313) |
+| StrongREJECT Score | 0.103 |
+
+Outputs: `outputs/no_defense_llama31/`, Results: `results/no_defense_llama31.json`

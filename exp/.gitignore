@@ -33,5 +33,5 @@ external/
 *.swp
 .DS_Store
 
-# Experiment results
-EXPERIMENT_RESULTS/
+# Experiment results (track reports, exclude raw data)
+EXPERIMENT_RESULTS/**/*.jsonl

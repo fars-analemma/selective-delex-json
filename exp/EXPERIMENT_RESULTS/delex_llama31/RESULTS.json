@@ -89,11 +89,11 @@
   "utility": {
     "jsonschemabench": {
       "delex_json": {
-        "json_validity_rate": 0.9522918615528532,
-        "schema_compliance_rate": 0.9298409728718429,
-        "total_schemas": 3207,
-        "total_errors": 443,
-        "modification_rate": 0.017149984409105083,
+        "json_validity_rate": 0.9539981475764124,
+        "schema_compliance_rate": 0.930534115467737,
+        "total_schemas": 3239,
+        "total_errors": 411,
+        "modification_rate": 0.0006174745291756715,
         "per_subset": {
           "Glaiveai2K": {
             "total": 1707,
@@ -104,18 +104,20 @@
             "schema_compliant_count": 1660,
             "schema_compliance_rate": 0.9730363423212193,
             "modified_count": 0,
-            "modification_rate": 0.0
+            "modification_rate": 0.0,
+            "delta_outputs_used": 0
           },
           "Github_easy": {
             "total": 1943,
-            "errors": 442,
-            "non_error_count": 1501,
-            "json_valid_count": 1356,
-            "json_validity_rate": 0.9033977348434377,
-            "schema_compliant_count": 1322,
-            "schema_compliance_rate": 0.8807461692205196,
-            "modified_count": 55,
-            "modification_rate": 0.03664223850766156
+            "errors": 410,
+            "non_error_count": 1533,
+            "json_valid_count": 1392,
+            "json_validity_rate": 0.9080234833659491,
+            "schema_compliant_count": 1354,
+            "schema_compliance_rate": 0.883235485975212,
+            "modified_count": 2,
+            "modification_rate": 0.001304631441617743,
+            "delta_outputs_used": 85
           }
         }
       },
@@ -146,8 +148,30 @@
         }
       },
       "delta": {
-        "json_validity_pp": -0.6775960377233492,
-        "schema_compliance_pp": -1.130034771375621
+        "json_validity_pp": -0.38204393505253104,
+        "schema_compliance_pp": -0.7004138809296403,
+        "method": "paired_comparison",
+        "total_paired_schemas": 3141
+      },
+      "paired_comparison": {
+        "Glaiveai2K": {
+          "paired_schemas": 1706,
+          "delex_validity": 99.53,
+          "nodef_validity": 99.82,
+          "validity_delta_pp": -0.29,
+          "delex_compliance": 97.3,
+          "nodef_compliance": 98.07,
+          "compliance_delta_pp": -0.76
+        },
+        "Github_easy": {
+          "paired_schemas": 1435,
+          "delex_validity": 91.08,
+          "nodef_validity": 91.57,
+          "validity_delta_pp": -0.49,
+          "delex_compliance": 88.85,
+          "nodef_compliance": 89.48,
+          "compliance_delta_pp": -0.63
+        }
       }
     },
     "ifeval_json": {
@@ -266,5 +290,5 @@
       ]
     ]
   },
-  "optimization_note": "Updated with conjunction-based suspicion function (>= 2 reasons). Benign FPR reduced from 11.3% to 1.1%."
+  "optimization_note": "Updated with conjunction-based suspicion function (>= 2 reasons) and accurate v2 utility via paired comparison. FPR 1.1%, utility delta -0.38pp validity / -0.70pp compliance."
 }

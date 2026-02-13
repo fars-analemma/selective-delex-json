@@ -203,15 +203,11 @@ Outputs: `outputs/escape_hatch_llama31/`, Results: `results/escape_hatch_llama31
 | StrongREJECT Score | 0.0016 |
 | Attack Schema Modification Rate | 100.0% |
 | Benign Schema Modification Rate (JSONSchemaBench) | 1.1% (100/8825) |
-| JSON Validity (DeLex) | >= 95.2% |
-| Schema Compliance (DeLex) | >= 93.0% |
-| JSON Validity (No Defense) | 95.9% |
-| Schema Compliance (No Defense) | 94.1% |
-| Utility Delta (validity) | <= -0.7% |
-| Utility Delta (compliance) | <= -1.1% |
+| Utility Delta (validity, paired) | -0.38pp |
+| Utility Delta (compliance, paired) | -0.70pp |
 | IFEval JSON Degradation | 0.0% |
 
-DeLex-JSON achieves 0.0% HarmBench ASR (from 22.0%), matching reject-only safety. Utility impact is minimal (<=0.7% validity, <=1.1% compliance). Benign FPR is 1.1%, well under the 2% target, using conjunction-based suspicion (>= 2 corroborating criteria required).
+DeLex-JSON achieves 0.0% HarmBench ASR (from 22.0%), matching reject-only safety. Utility impact is minimal (-0.38pp validity, -0.70pp compliance via paired comparison). Benign FPR is 1.1%, well under the 2% target, using conjunction-based suspicion (>= 2 corroborating criteria required).
 
 Outputs: `outputs/delex_v2_llama31/`, Results: `results/delex_v2_llama31_harmbench_asr.json`
 

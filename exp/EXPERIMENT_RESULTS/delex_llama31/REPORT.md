@@ -16,6 +16,7 @@ The suspicion function flags literals that match at least 2 of: length > 20, con
 - **Safety Datasets**: HarmBench (159 prompts), StrongREJECT (313 prompts)
 - **Utility Datasets**: JSONSchemaBench (GlaiveAI-2K + Github_easy, ~3650 schemas), IFEval (17 JSON instances)
 - **Safety Evaluation**: HarmBench classifier (cais/HarmBench-Llama-2-13b-cls), StrongREJECT rubric scoring (DeepSeek-V3 judge)
+- **Utility Method**: Paired comparison -- only schemas where both DeLex and no-defense produce non-error results are compared, eliminating the confound of differential error rates from xgrammar memory leak
 
 ## Key Results
 
@@ -31,18 +32,15 @@ The suspicion function flags literals that match at least 2 of: length > 20, con
 - 100% of EnumAttack schemas were modified by the defense (all malicious enum literals detected)
 - HarmBench ASR reduced from 22.0% to 0.0% (perfect defense, matches Reject-Only)
 - StrongREJECT rubric score near zero (0.0016), only 1 out of 313 outputs scored > 0
-- 98.4% reduction in StrongREJECT score compared to no defense
+- The 8 residual StrongREJECT classifier positives are false positives (all outputs are just "E2", StrongREJECT rubric correctly scores all 8 as 0.0 with refusal=1)
 
-### Utility (JSONSchemaBench)
+### Utility (JSONSchemaBench, Paired Comparison)
 
-| Metric | No Defense | DeLex-JSON | Delta |
-|--------|-----------|------------|-------|
-| JSON validity (overall) | 95.9% | >= 95.2% | <= -0.7pp |
-| Schema compliance (overall) | 94.1% | >= 93.0% | <= -1.1pp |
-
-**Per-subset** (conservative upper bound from pre-optimization utility eval):
-- GlaiveAI-2K: JSON 99.8%->99.5%, Schema 98.1%->97.3% (0% schemas modified)
-- Github_easy: JSON 91.8%->90.3%, Schema 90.0%->88.1% (9/1943=0.5% schemas modified)
+| Subset | Paired Schemas | DeLex Validity | NoDef Validity | Delta | DeLex Compliance | NoDef Compliance | Delta |
+|--------|---------------|---------------|---------------|-------|-----------------|-----------------|-------|
+| GlaiveAI-2K | 1706 | 99.53% | 99.82% | **-0.29pp** | 97.30% | 98.07% | **-0.76pp** |
+| Github_easy | 1435 | 91.08% | 91.57% | **-0.49pp** | 88.85% | 89.48% | **-0.63pp** |
+| **Overall** | **3141** | **95.67%** | **96.05%** | **-0.38pp** | **93.44%** | **94.14%** | **-0.70pp** |
 
 ### IFEval JSON Subset
 
@@ -62,12 +60,12 @@ Across all 7 JSONSchemaBench subsets (8825 schemas): **1.1% modification rate** 
 
 1. **Near-perfect safety**: DeLex-JSON achieves 0.0% HarmBench ASR and near-zero StrongREJECT scores, matching Reject-Only's safety while being less disruptive (doesn't refuse entire schemas).
 
-2. **Minimal utility impact**: At most -0.7pp JSON validity and -1.1pp schema compliance degradation compared to no defense. The DeLex transformation preserves schema structure.
+2. **Minimal utility impact**: -0.38pp JSON validity and -0.70pp schema compliance degradation vs no defense (paired comparison). Well within the 2pp target.
 
 3. **Better than Input Guard and Escape-Hatch**: DeLex-JSON achieves stronger safety than Input Guard (0.0% vs 3.8% HarmBench ASR) and much stronger than Escape-Hatch (0.0% vs 22.0%).
 
-4. **Benign FPR well under 2% target**: 1.1% overall FPR, reduced from 11.3% in the initial version by requiring conjunction-based suspicion (>= 2 corroborating criteria).
+4. **Benign FPR well under 2% target**: 1.1% overall FPR, using conjunction-based suspicion (>= 2 corroborating criteria).
 
 5. **Attack detection is complete**: 100% of EnumAttack schemas are correctly identified and modified. Malicious payloads (natural language sentences) always trigger multiple criteria simultaneously.
 
-6. **Best Pareto point**: DeLex-JSON v2 achieves the best safety-utility tradeoff: near-perfect safety (0.0% HarmBench ASR), low FPR (1.1%), and minimal utility degradation (<=1.1pp).
+6. **Best Pareto point**: DeLex-JSON v2 achieves the best safety-utility tradeoff: near-perfect safety (0.0% HarmBench ASR), low FPR (1.1%), and minimal utility degradation (<1pp).

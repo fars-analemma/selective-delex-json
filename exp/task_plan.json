@@ -20,8 +20,8 @@
     "category": "Baseline Experiment",
     "title": "Input Guard Defense on Llama-3.1-8B-Instruct",
     "description": "Evaluate input-side auditing as a defense against EnumAttack. This baseline uses a safety guard model (Llama Guard) to classify the combined (prompt + schema) input before allowing constrained decoding to proceed. If the guard model flags the input as unsafe, the request is rejected. This tests whether existing input auditing approaches can detect control-plane payloads hidden in JSON schema fields.\n\nReference: \"Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations\" | https://arxiv.org/abs/2312.06674\n\nKey insight from the CDA paper: EnumAttack hides malicious content in the schema's enum fields while keeping the visible prompt benign, which is designed to bypass prompt auditing. This baseline tests whether guard models can detect harm in schema content.",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "Input Guard baseline completed. Llama Guard 3 detects ~90% of EnumAttack schemas (88.7% on HarmBench, 91.7% on StrongREJECT). Residual ASR: HarmBench 3.8% (vs 22.0% no defense), StrongREJECT 2.9%/3.2% (cls/rubric, vs 15.3%/14.4% no defense), StrongREJECT Score 0.024 (vs 0.103). False positive rate on 200 benign JSONSchemaBench schemas: 0.0%. The guard is effective but not perfect -- misinformation and subtler categories have lower detection rates."
   },
   {
     "index": 3,

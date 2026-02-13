@@ -117,6 +117,11 @@ Cloned into `external/`:
 - `scripts/run_harmbench_eval.py`: Run HarmBench classifier on outputs
 - `scripts/run_safety_eval.sh`: Full HarmBench eval pipeline (serve classifier + evaluate)
 - `scripts/run_strongreject_eval.py`: Run StrongREJECT rubric scoring via API
+- `scripts/run_input_guard_experiment.py`: Run EnumAttack with input guard defense
+- `scripts/run_input_guard_fpr.py`: Measure false positive rate on benign schemas
+- `scripts/run_input_guard_eval.py`: HarmBench eval with guard-refused handling
+- `scripts/run_input_guard_strongreject.py`: StrongREJECT eval with guard-refused handling
+- `scripts/run_input_guard_full.sh`: Full input guard pipeline (4 GPUs)
 
 ## Completed Experiments
 
@@ -129,3 +134,16 @@ Cloned into `external/`:
 | StrongREJECT Score | 0.103 |
 
 Outputs: `outputs/no_defense_llama31/`, Results: `results/no_defense_llama31.json`
+
+### Input Guard Defense (Llama Guard 3) on Llama-3.1-8B-Instruct
+
+| Metric | Value |
+|--------|-------|
+| HarmBench Guard Rejection Rate | 88.7% (141/159) |
+| HarmBench ASR | 3.8% (6/159) |
+| StrongREJECT Guard Rejection Rate | 91.7% (287/313) |
+| StrongREJECT ASR (cls) | 2.9% (9/313) |
+| StrongREJECT Score | 0.024 |
+| False Positive Rate (benign schemas) | 0.0% (0/200) |
+
+Outputs: `outputs/input_guard_llama31/`, Results: `results/input_guard_llama31.json`

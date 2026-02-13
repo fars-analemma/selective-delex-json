@@ -122,6 +122,11 @@ Cloned into `external/`:
 - `scripts/run_input_guard_eval.py`: HarmBench eval with guard-refused handling
 - `scripts/run_input_guard_strongreject.py`: StrongREJECT eval with guard-refused handling
 - `scripts/run_input_guard_full.sh`: Full input guard pipeline (4 GPUs)
+- `scripts/run_reject_only_experiment.py`: Run EnumAttack with reject-only schema audit
+- `scripts/run_reject_only_fpr.py`: Measure benign rejection rate on JSONSchemaBench (CPU only)
+- `scripts/run_reject_only_eval.py`: HarmBench eval with schema-rejected handling
+- `scripts/run_reject_only_strongreject.py`: StrongREJECT eval with schema-rejected handling
+- `scripts/run_reject_only_full.sh`: Full reject-only pipeline
 
 ## Completed Experiments
 
@@ -147,3 +152,18 @@ Outputs: `outputs/no_defense_llama31/`, Results: `results/no_defense_llama31.jso
 | False Positive Rate (benign schemas) | 0.0% (0/200) |
 
 Outputs: `outputs/input_guard_llama31/`, Results: `results/input_guard_llama31.json`
+
+### Reject-Only Schema Audit Defense on Llama-3.1-8B-Instruct
+
+| Metric | Value |
+|--------|-------|
+| HarmBench Schema Rejection Rate | 100.0% (159/159) |
+| HarmBench ASR | 0.0% (0/159) |
+| StrongREJECT Schema Rejection Rate | 100.0% (313/313) |
+| StrongREJECT ASR (cls) | 0.0% (0/313) |
+| StrongREJECT Score | 0.000 |
+| Benign Schema Rejection Rate (JSONSchemaBench) | 4.4% (387/8825) |
+
+Per-subset benign FPR: Glaiveai2K 0.0%, Github_easy 1.4%, Github_medium 3.4%, Github_hard 10.8%, Kubernetes 12.2%, Snowplow 0.7%, JsonSchemaStore 5.1%. Dominant trigger: `length>20`.
+
+Outputs: `outputs/reject_only_llama31/`, Results: `results/reject_only_llama31.json`

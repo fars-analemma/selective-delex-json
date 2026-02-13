@@ -28,8 +28,8 @@
     "category": "Baseline Experiment",
     "title": "Reject-Only Schema Audit on Llama-3.1-8B-Instruct",
     "description": "Evaluate a reject-only schema filtering defense that inspects JSON schemas for suspicious forced literals and rejects the entire schema if any are found. Unlike the proposed Selective DeLex-JSON which replaces suspicious literals with placeholders, this baseline simply refuses to process schemas containing suspicious content. This establishes the safety-utility tradeoff of a reject-based approach: it may achieve high safety but at the cost of rejecting many benign schemas.\n\nReference: \"Output Constraints as Attack Surface: Exploiting Structured Generation to Bypass LLM Safety Mechanisms\" (Defense Sketch 1: Safety-Preserving Grammar Constraints) | https://arxiv.org/abs/2502.XXXXX\n\nThe suspicion function uses the same criteria as the proposed method (length > 20 chars, contains whitespace, instruction-like regex patterns) to ensure a fair comparison \u2014 the only difference is reject vs. delexicalize.",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "Reject-only schema audit defense implemented and evaluated. All EnumAttack schemas rejected (100% rejection rate on HarmBench 159 and StrongREJECT 313). HarmBench ASR=0.0%, StrongREJECT ASR=0.0%, StrongREJECT Score=0.000. Benign schema rejection rate on JSONSchemaBench: 4.4% overall (387/8825). Per-subset FPR: Glaiveai2K 0.0%, Github_easy 1.4%, Github_medium 3.4%, Github_hard 10.8%, Kubernetes 12.2%, Snowplow 0.7%, JsonSchemaStore 5.1%. Dominant false-positive trigger is length>20. No GPU was needed since all attack schemas were rejected before constrained decoding."
   },
   {
     "index": 4,

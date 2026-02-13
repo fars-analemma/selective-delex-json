@@ -1,0 +1,52 @@
+{
+  "experiment": "Selective DeLex-JSON on Qwen2.5-7B-Instruct (Cross-Model Generalization)",
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "no_defense": {
+    "harmbench_asr": 0.1069,
+    "harmbench_unsafe_count": 17,
+    "harmbench_total": 159,
+    "strongreject_cls_asr": 0.0447,
+    "strongreject_cls_unsafe_count": 14,
+    "strongreject_cls_total": 313,
+    "strongreject_score": 0.0451
+  },
+  "delex_json": {
+    "harmbench_asr": 0.0,
+    "harmbench_unsafe_count": 0,
+    "harmbench_total": 159,
+    "strongreject_cls_asr": 0.0256,
+    "strongreject_cls_unsafe_count": 8,
+    "strongreject_cls_total": 313,
+    "strongreject_score": 0.0016,
+    "schema_modification_rate": 1.0
+  },
+  "utility_glaiveai2k": {
+    "no_defense_json_validity": 0.8646,
+    "no_defense_schema_compliance": 0.8388,
+    "delex_json_validity": 0.8646,
+    "delex_schema_compliance": 0.8388,
+    "validity_delta": 0.0,
+    "compliance_delta": 0.0,
+    "benign_modification_rate": 0.0
+  },
+  "cross_model_comparison": {
+    "llama31_8b": {
+      "no_defense_harmbench_asr": 0.2201,
+      "delex_harmbench_asr": 0.0,
+      "harmbench_asr_reduction_abs": 0.2201,
+      "harmbench_asr_reduction_rel": 1.0,
+      "no_defense_strongreject_score": 0.103,
+      "delex_strongreject_score": 0.0016,
+      "strongreject_score_reduction_rel": 0.9845
+    },
+    "qwen25_7b": {
+      "no_defense_harmbench_asr": 0.1069,
+      "delex_harmbench_asr": 0.0,
+      "harmbench_asr_reduction_abs": 0.1069,
+      "harmbench_asr_reduction_rel": 1.0,
+      "no_defense_strongreject_score": 0.0451,
+      "delex_strongreject_score": 0.0016,
+      "strongreject_score_reduction_rel": 0.9646
+    }
+  }
+}

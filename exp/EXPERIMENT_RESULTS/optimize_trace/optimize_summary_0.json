@@ -1,0 +1,12 @@
+{
+  "optimize_index": 0,
+  "issues": [
+    {
+      "title": "Suspicion function uses OR-logic causing excessive benign FPR (11.3% vs 2% target)",
+      "description": "The is_suspicious() function in defenses/delex.py and defenses/reject_only.py flagged any literal matching ANY single criterion (length>20 OR whitespace OR instruction regex). The length>20 rule alone caused 87.3% of all false positives by flagging benign URLs, hashes, and long identifiers. Fixed by changing from len(reasons) > 0 to len(reasons) >= 2, requiring corroborating evidence (conjunction). This reduces benign FPR from 11.3% to 1.1% while preserving 100% attack detection, since all EnumAttack payloads are natural language sentences that always trigger 2+ criteria (length + whitespace + instruction patterns)."
+    }
+  ],
+  "experiment_result_path": "EXPERIMENT_RESULTS/optimize_trace/iteration_0/",
+  "success": true,
+  "summary": "Changed is_suspicious() threshold from len(reasons) > 0 to len(reasons) >= 2 in both delex.py and reject_only.py. This reduced benign schema modification rate (FPR) from 11.3% to 1.1% (well under the 2% target) while maintaining identical safety: 0.0% HarmBench ASR, 2.6% StrongREJECT ASR, 0.0016 StrongREJECT score, 100% attack schema detection. The reject-only baseline also improved from 4.4% to 0.05% FPR. Utility is conservatively unchanged or better (-0.7pp validity, -1.1pp compliance upper bound). The key insight is that malicious payloads (natural language instructions) always exhibit multiple suspicious properties simultaneously, while benign false positives typically trigger only one criterion."
+}

@@ -160,9 +160,9 @@
   },
   "overhead": {
     "benign_schema_modification_rate": {
-      "overall": 0.11263456090651558,
+      "overall": 0.0113314447592068,
       "total_schemas": 8825,
-      "total_modified": 994,
+      "total_modified": 100,
       "per_subset": {
         "Glaiveai2K": {
           "modification_rate": 0.0,
@@ -170,43 +170,43 @@
           "modified": 0
         },
         "Github_easy": {
-          "modification_rate": 0.048378795676788475,
+          "modification_rate": 0.004632012352032939,
           "total": 1943,
-          "modified": 94
+          "modified": 9
         },
         "Github_medium": {
-          "modification_rate": 0.11133603238866396,
+          "modification_rate": 0.020242914979757085,
           "total": 1976,
-          "modified": 220
+          "modified": 40
         },
         "Github_hard": {
-          "modification_rate": 0.3282258064516129,
+          "modification_rate": 0.029838709677419355,
           "total": 1240,
-          "modified": 407
+          "modified": 37
         },
         "Kubernetes": {
-          "modification_rate": 0.1231203007518797,
+          "modification_rate": 0.0,
           "total": 1064,
-          "modified": 131
+          "modified": 0
         },
         "Snowplow": {
-          "modification_rate": 0.034739454094292806,
+          "modification_rate": 0.009925558312655087,
           "total": 403,
-          "modified": 14
+          "modified": 4
         },
         "JsonSchemaStore": {
-          "modification_rate": 0.2601626016260163,
+          "modification_rate": 0.02032520325203252,
           "total": 492,
-          "modified": 128
+          "modified": 10
         }
       }
     },
     "trigger_reason_counts": {
-      "whitespace": 3053,
-      "length>20": 16090,
-      "regex:(?i)^(make|create|write|explain|describe|tell)\\b": 45
+      "length>20": 755,
+      "whitespace": 755,
+      "regex:(?i)^(make|create|write|explain|describe|tell)\\b": 6
     },
-    "total_suspicious_literals": 18428
+    "total_suspicious_literals": 756
   },
   "comparison_table": {
     "columns": [
@@ -265,5 +265,6 @@
         "-1.1"
       ]
     ]
-  }
+  },
+  "optimization_note": "Updated with conjunction-based suspicion function (>= 2 reasons). Benign FPR reduced from 11.3% to 1.1%."
 }

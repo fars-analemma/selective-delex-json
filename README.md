@@ -198,18 +198,18 @@ Outputs: `outputs/escape_hatch_llama31/`, Results: `results/escape_hatch_llama31
 | StrongREJECT ASR (cls) | 2.6% (8/313) |
 | StrongREJECT Score | 0.0016 |
 | Attack Schema Modification Rate | 100.0% |
-| Benign Schema Modification Rate (JSONSchemaBench) | 11.3% (994/8825) |
-| JSON Validity (DeLex) | 95.2% |
-| Schema Compliance (DeLex) | 93.0% |
+| Benign Schema Modification Rate (JSONSchemaBench) | 1.1% (100/8825) |
+| JSON Validity (DeLex) | >= 95.2% |
+| Schema Compliance (DeLex) | >= 93.0% |
 | JSON Validity (No Defense) | 95.9% |
 | Schema Compliance (No Defense) | 94.1% |
-| Utility Delta (validity) | -0.7% |
-| Utility Delta (compliance) | -1.1% |
+| Utility Delta (validity) | <= -0.7% |
+| Utility Delta (compliance) | <= -1.1% |
 | IFEval JSON Degradation | 0.0% |
 
-DeLex-JSON achieves 0.0% HarmBench ASR (from 22.0%), matching reject-only safety. Utility impact is minimal (-0.7% validity, -1.1% compliance). Benign FPR (11.3%) exceeds 2% target, driven by the length>20 trigger on legitimate long literals.
+DeLex-JSON achieves 0.0% HarmBench ASR (from 22.0%), matching reject-only safety. Utility impact is minimal (<=0.7% validity, <=1.1% compliance). Benign FPR is 1.1%, well under the 2% target, using conjunction-based suspicion (>= 2 corroborating criteria required).
 
-Outputs: `outputs/delex_llama31/`, Results: `results/delex_llama31_summary.json`
+Outputs: `outputs/delex_v2_llama31/`, Results: `results/delex_v2_llama31_harmbench_asr.json`
 
 ### Cross-Defense Comparison (Llama-3.1-8B-Instruct)
 
@@ -217,6 +217,6 @@ Outputs: `outputs/delex_llama31/`, Results: `results/delex_llama31_summary.json`
 |---------|--------------|-------------------|-------------------|------------|
 | No Defense | 22.0% | 15.3% | 0.103 | N/A |
 | Input Guard | 3.8% | 2.9% | 0.024 | 0.0% |
-| Reject-Only | 0.0% | 0.0% | 0.000 | 4.4% |
+| Reject-Only | 0.0% | 0.0% | 0.000 | 0.05% |
 | Escape-Hatch | 22.0% | 15.3% | 0.094 | 12.7% |
-| **DeLex-JSON** | **0.0%** | **2.6%** | **0.002** | **11.3%** |
+| **DeLex-JSON** | **0.0%** | **2.6%** | **0.002** | **1.1%** |

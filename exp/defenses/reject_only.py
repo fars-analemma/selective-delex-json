@@ -26,7 +26,7 @@ def is_suspicious(literal: str) -> Tuple[bool, list]:
     for pat in INSTRUCTION_PATTERNS:
         if pat.search(literal):
             reasons.append(f"regex:{pat.pattern}")
-    return (len(reasons) > 0, reasons)
+    return (len(reasons) >= 2, reasons)
 
 
 def extract_forced_literals(schema: dict, path: str = "") -> list:

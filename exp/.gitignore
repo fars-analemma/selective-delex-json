@@ -1,3 +1,37 @@
 .venv/
 .env
 wandb/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Data and outputs
+data/
+outputs/
+results/
+
+# External repos (cloned separately)
+external/
+
+# Model checkpoints
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+
+# Logs
+*.log
+.train_service_logs/
+.deploy_service_logs/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Experiment results
+EXPERIMENT_RESULTS/

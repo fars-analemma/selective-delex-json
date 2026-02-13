@@ -133,6 +133,10 @@ Cloned into `external/`:
 - `scripts/run_escape_hatch_strongreject.py`: StrongREJECT eval with model-refused handling
 - `scripts/run_escape_hatch_full.sh`: Full escape-hatch pipeline
 
+- `scripts/run_qwen25_safety.sh`: Full Qwen2.5 safety pipeline (no-defense + DeLex + eval)
+- `scripts/run_qwen25_utility.sh`: Qwen2.5 utility pipeline (resilient restart)
+- `scripts/aggregate_qwen25_results.py`: Aggregate Qwen2.5 results + cross-model comparison
+
 ## Completed Experiments
 
 ### EnumAttack (No Defense) on Llama-3.1-8B-Instruct
@@ -220,3 +224,25 @@ Outputs: `outputs/delex_v2_llama31/`, Results: `results/delex_v2_llama31_harmben
 | Reject-Only | 0.0% | 0.0% | 0.000 | 0.05% |
 | Escape-Hatch | 22.0% | 15.3% | 0.094 | 12.7% |
 | **DeLex-JSON** | **0.0%** | **2.6%** | **0.002** | **1.1%** |
+
+### Selective DeLex-JSON on Qwen2.5-7B-Instruct (Cross-Model)
+
+| Metric | No Defense | DeLex-JSON | Reduction |
+|--------|-----------|------------|-----------|
+| HarmBench ASR | 10.7% (17/159) | 0.0% (0/159) | -10.7pp (100%) |
+| StrongREJECT ASR (cls) | 4.5% (14/313) | 2.6% (8/313) | -1.9pp (42.9%) |
+| StrongREJECT Score | 0.045 | 0.0016 | -0.044 (96.5%) |
+| Utility: JSON Validity (Glaiveai2K) | 86.5% | 86.5% | 0.0% |
+| Utility: Schema Compliance (Glaiveai2K) | 83.9% | 83.9% | 0.0% |
+
+DeLex-JSON achieves 0.0% HarmBench ASR on Qwen2.5 (from 10.7%), confirming model-agnostic effectiveness. Utility impact is zero on Glaiveai2K (0% benign schema modification rate).
+
+Outputs: `outputs/no_defense_qwen25/`, `outputs/delex_qwen25/`
+Results: `results/no_defense_qwen25.json`, `results/delex_qwen25.json`, `results/delex_utility_qwen25.json`, `results/cross_model_comparison.json`
+
+### Cross-Model Comparison
+
+| Model | No-Def HB ASR | DeLex HB ASR | No-Def SR Score | DeLex SR Score |
+|-------|--------------|-------------|----------------|---------------|
+| Llama-3.1-8B-Instruct | 22.0% | 0.0% | 0.103 | 0.0016 |
+| Qwen2.5-7B-Instruct | 10.7% | 0.0% | 0.045 | 0.0016 |

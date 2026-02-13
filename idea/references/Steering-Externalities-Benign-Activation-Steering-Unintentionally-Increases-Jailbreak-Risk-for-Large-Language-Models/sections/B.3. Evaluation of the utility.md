@@ -1,0 +1,5 @@
+B.3. Evaluation of the utility
+In our steering, we measure two different utilities: • Harmless Refusal Rate: We evaluate this metric by measuring the refusal rate using two distinct judges. First, we employ Distilroberta-Base-Rejection-v1 (Pro-tectAI.com, 2024), which determines whether a response constitutes a rejection or compliance. Second, we utilize the SorryBench judge, a fine-tuned LLM based on Mistral-7B-v0.2. This judge classifies whether the generated response complies with the given query. • JSON Correctness: Adhering to the instructionfollowing evaluation protocol ~\cite{b23}, we assess whether the model's output conforms to valid JSON syntax. As shown in Listing 1, we utilize a specific function to verify if the response can be successfully parsed as a JSON object. 1 def check_following(self, value): 2 value = ( 3 value.strip()
+
+Section references:
+[b23]: A Stolfo, V Balachandran, S Yousefi, E Horvitz, B Nushi. Improving instruction-following in language models through activation steering. (2025). Improving instruction-following in language models through activation steering

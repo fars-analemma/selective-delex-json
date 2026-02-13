@@ -1,0 +1,5 @@
+url: https://ar5iv.labs.arxiv.org/html/2509.06982
+title: CARE: Decoding Time Safety Alignment via Rollback and Introspection Intervention
+authors: Xiaomeng Hu and Fei Huang and Chenhan Yuan and Junyang Lin and Tsung-Yi Ho
+publish date: 2025
+citation_key: hu2025caredecodingtimesafety

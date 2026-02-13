@@ -1,0 +1,2 @@
+4 Experiments
+In this section we evaluate our proposed CARE framework. We investigate its core performance practical trade-offs and the effectiveness of our novel Introspection method’s design. This is achieved through comprehensive comparisons against existing intervention methods analyses of key hyperparameters and detailed ablation studies. Below we detail the overall experimental setup followed by our empirical results.

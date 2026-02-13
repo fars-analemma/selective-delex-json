@@ -1,0 +1,5 @@
+url: https://ar5iv.labs.arxiv.org/html/2501.10868
+title: JSONSchemaBench: A Rigorous Benchmark of Structured Outputs for Language Models
+authors: Saibo Geng and Hudson Cooper and Michał Moskal and Samuel Jenkins and Julian Berman and Nathan Ranchin and Robert West and Eric Horvitz and Harsha Nori
+publish date: 2025
+citation_key: geng2025jsonschemabenchrigorousbenchmarkstructured

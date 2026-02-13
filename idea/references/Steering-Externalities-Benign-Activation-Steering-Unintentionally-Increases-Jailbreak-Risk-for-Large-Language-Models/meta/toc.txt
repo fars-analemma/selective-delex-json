@@ -1,0 +1,40 @@
+abstract.md
+Introduction.md
+Related Work.md
+Steering Setups and Jailbreak Evaluation.md
+Activation steering.md
+Representative benign steering workflows.md
+Jailbreak evaluation and threat model.md
+Experiments.md
+Experimental Setup.md
+Benchmark-only Evaluation Utility Gains and Intrinsic Vulnerability Evaluation.md
+Synergistic.md
+Bypassing the Refusal Gate via Autoregressive Inertia.md
+Token-level Evidence Per-Token KL Divergence Analysis.md
+Representation-level Evidence Benign Steering Obscure Harmful Prompts in Hidden Space.md
+Discussions.md
+Conclusion.md
+Impact Statement.md
+Positive Societal Impact.md
+Alignment evaluation beyond safety.md
+Potential Risks and Mitigations.md
+A. Comparison with Prior Work on Steering and Alignment.md
+B. Implementation Details.md
+B.1. Steering Vector Generation.md
+B.2. Hyperparameter settings.md
+B.3. Evaluation of the utility.md
+4.md
+5.md
+6.md
+7.md
+8.md
+D. Per-token KL Divergence on Gemma-7B-it model.md
+E. Qualitative Analysis of Steering.md
+Llama-3-8B-Instruct.md
+Llama.md
+G. STEER-BIND Results.md
+H. Win-Rate measurement of Compliance Steering.md
+I. Measuring Refusal Rate by using an additional judge.md
+K. Numerical value of Intrinsic and Synergistic Vulnerabilities.md
+L. Anonymous Repository.md
+References.md

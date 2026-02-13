@@ -1,0 +1,24 @@
+abstract.md
+1 Introduction.md
+  Contributions.md
+2 Background and Related Work.md
+3 The JSONSchemaBench.md
+  3.1 Data Collection.md
+4 Efficiency.md
+  Metrics.md
+  4.1 Setup.md
+    Addressing coverage bias..md
+    Grammar compilation time..md
+    Time per output token..md
+5 Coverage.md
+  5.1 Setup.md
+  5.2 Results.md
+    Empirical Coverage.md
+    Compliance Rate.md
+  5.3 JSON Schema Test Suite Complementary Evaluation.md
+    5.3.1 Results.md
+6 Quality.md
+  6.1 Setup.md
+  6.2 Results.md
+7 Conclusion.md
+References.md

@@ -1,0 +1,2 @@
+3 The JSONSchemaBench
+Our goal is to design a benchmark that is (1) diverse enough to cover the most common constraint types encountered in real-world applications (2) large enough to provide a reliable evaluation and (3) equipped with fair and multidimensional metrics to ensure comprehensive assessments.

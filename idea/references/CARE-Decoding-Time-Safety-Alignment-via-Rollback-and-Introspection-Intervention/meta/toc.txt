@@ -1,0 +1,24 @@
+abstract.md
+1 Introduction.md
+2 Pilot Study On the Limits of Decoding-Time Intervention for Safety Alignment.md
+  2.1 Results.md
+  2.2 Key Insights.md
+3 CARE Mechanism and Method for Decoding-Time Safety Alignment.md
+  3.1 The Detect-Rollback-Intervene Mechanism.md
+    3.1.1 Token Buffering for In-Flight Correction.md
+    3.1.2 Guard for Real-Time Safety Checking.md
+    3.1.3 The Rollback and Intervention Loop.md
+  3.2 Intervention Strategies.md
+    3.2.1 Intervention Strategies within the CARE Framework.md
+    3.2.2 Introspection Guiding Safety with Generated Self-Critiques.md
+4 Experiments.md
+  4.1 Experimental Setup.md
+  4.2 Main Results.md
+  4.3 No Free Lunch The Trade-off Between Performance and Latency.md
+  4.4 A Single-Intervention Variant for Efficient Deployment.md
+  4.5 Ablation Study of the Introspection Method.md
+    4.5.1 Ablation on the Introspection Prompt Design.md
+    4.5.2 Ablation on Sampling Parameters.md
+5 Related Work.md
+6 Conclusion.md
+References.md

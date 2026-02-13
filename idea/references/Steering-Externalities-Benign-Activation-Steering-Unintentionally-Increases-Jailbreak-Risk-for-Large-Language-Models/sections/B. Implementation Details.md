@@ -1,0 +1,2 @@
+B. Implementation Details
+In this section, we outline the implementation details and hyperparameter settings for our two methods. Specifically, we first discuss the implementation of steering vector generation, followed by the hyperparameter configurations for the steering methods.

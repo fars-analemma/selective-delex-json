@@ -1,0 +1,106 @@
+[
+  {
+    "index": 0,
+    "category": "Environment Configuration",
+    "title": "Dependencies Installation and Project Structure Initialization",
+    "description": "Set up the development environment for Selective DeLex-JSON experiments on control-plane jailbreak defense for structured-output LLM APIs. The project is inference-only (no training) and requires: (1) a constrained decoding stack (vLLM with structured output support via Outlines), (2) LLM serving for 8B-class models (Llama-3.1-8B-Instruct, Qwen2.5-7B-Instruct), (3) safety evaluation tools (HarmBench classifier, StrongREJECT scorer), (4) utility evaluation tools (JSONSchemaBench harness, IFEval scripts), and (5) a guard model for optional suspicion-function enhancement (Llama Guard). The codebase will support schema preprocessing (delexicalization and alternatives), attack reproduction (EnumAttack), and multiple defense baselines with shared evaluation pipelines.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 1,
+    "category": "Baseline Experiment",
+    "title": "EnumAttack (No Defense) on Llama-3.1-8B-Instruct",
+    "description": "Reproduce the EnumAttack (Constrained Decoding Attack) on Llama-3.1-8B-Instruct under our fixed constrained-decoding stack (vLLM with structured output) with no defense applied. This establishes the attack severity baseline — demonstrating high ASR that motivates defense development — and validates that our setup replicates the vulnerability documented in prior work. All subsequent defense baselines and the proposed method will be compared against these undefended results.\n\nReference: \"Output Constraints as Attack Surface: Exploiting Structured Generation to Bypass LLM Safety Mechanisms\" | https://arxiv.org/abs/2502.XXXXX (CDA paper)\n\nKey configuration: Llama-3.1-8B-Instruct served via vLLM (OpenAI-compatible server), temperature=0.6, max_model_len=3072. EnumAttack embeds the harmful question in a forced enum string within the JSON schema, plus an affirmative prefix enum to prime the model, with a free-text 'answer' field for the model to generate into.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 2,
+    "category": "Baseline Experiment",
+    "title": "Input Guard Defense on Llama-3.1-8B-Instruct",
+    "description": "Evaluate input-side auditing as a defense against EnumAttack. This baseline uses a safety guard model (Llama Guard) to classify the combined (prompt + schema) input before allowing constrained decoding to proceed. If the guard model flags the input as unsafe, the request is rejected. This tests whether existing input auditing approaches can detect control-plane payloads hidden in JSON schema fields.\n\nReference: \"Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations\" | https://arxiv.org/abs/2312.06674\n\nKey insight from the CDA paper: EnumAttack hides malicious content in the schema's enum fields while keeping the visible prompt benign, which is designed to bypass prompt auditing. This baseline tests whether guard models can detect harm in schema content.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 3,
+    "category": "Baseline Experiment",
+    "title": "Reject-Only Schema Audit on Llama-3.1-8B-Instruct",
+    "description": "Evaluate a reject-only schema filtering defense that inspects JSON schemas for suspicious forced literals and rejects the entire schema if any are found. Unlike the proposed Selective DeLex-JSON which replaces suspicious literals with placeholders, this baseline simply refuses to process schemas containing suspicious content. This establishes the safety-utility tradeoff of a reject-based approach: it may achieve high safety but at the cost of rejecting many benign schemas.\n\nReference: \"Output Constraints as Attack Surface: Exploiting Structured Generation to Bypass LLM Safety Mechanisms\" (Defense Sketch 1: Safety-Preserving Grammar Constraints) | https://arxiv.org/abs/2502.XXXXX\n\nThe suspicion function uses the same criteria as the proposed method (length > 20 chars, contains whitespace, instruction-like regex patterns) to ensure a fair comparison — the only difference is reject vs. delexicalize.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 4,
+    "category": "Baseline Experiment",
+    "title": "Escape-Hatch Wrapper on Llama-3.1-8B-Instruct",
+    "description": "Evaluate an escape-hatch defense that modifies the constrained decoding grammar to always allow the model to generate a refusal token sequence (e.g., 'I cannot' or 'I'm sorry') even when the JSON schema would otherwise force specific outputs. This tests whether preserving the model's ability to refuse within constrained decoding can mitigate control-plane jailbreaks.\n\nReference: \"Output Constraints as Attack Surface: Exploiting Structured Generation to Bypass LLM Safety Mechanisms\" (Defense Sketch 1: Refusal-Token Whitelisting) | https://arxiv.org/abs/2502.XXXXX\n\nThe escape-hatch approach modifies the constrained-decoding grammar to include a refusal alternative at the top level of the JSON schema, allowing the model to output a refusal object instead of the attack-specified schema.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 5,
+    "category": "Main Experiment",
+    "title": "Selective DeLex-JSON on Llama-3.1-8B-Instruct (Primary Model)",
+    "description": "Implement and evaluate the proposed Selective DeLex-JSON defense on the primary pre-registered model (Llama-3.1-8B-Instruct). Selective DeLex-JSON is a training-free schema-to-schema transformation applied before constrained decoding that: (1) strips non-semantic free-text schema fields (description, title, examples, default), and (2) replaces suspicious forced literals (enum/const strings matching the suspicion function) with short opaque placeholders (E0, E1, ...). The hypothesis is that by preventing contiguous natural-language payloads from entering the autoregressive context, CDA-style priming is broken while benign schemas with short identifiers remain intact.\n\nSuspicion function (pre-registered, frozen before evaluation): a literal is delexicalized if ANY of: length > 20 characters, contains whitespace, matches instruction-like regex patterns. Optional enhancement: Llama Guard safety classifier flags it as unsafe.\n\nThis experiment evaluates both safety (ASR reduction on HarmBench/StrongREJECT under EnumAttack) and utility (JSON validity, schema compliance, benign schema modification rate on JSONSchemaBench and IFEval).",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 6,
+    "category": "Optimization",
+    "title": "Optimize: Selective DeLex-JSON on Llama-3.1-8B-Instruct (Primary Model)",
+    "description": "Optimize the main experiment 'Selective DeLex-JSON on Llama-3.1-8B-Instruct (Primary Model)' to improve results.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 7,
+    "category": "Main Experiment",
+    "title": "Selective DeLex-JSON on Qwen2.5-7B-Instruct (Generalization)",
+    "description": "Evaluate Selective DeLex-JSON on a secondary model (Qwen2.5-7B-Instruct) to test generalization across model families. This uses the identical defense implementation, suspicion function, and evaluation pipeline from the primary model experiment — only the target LLM changes. This demonstrates that the defense is model-agnostic and works across different safety-aligned architectures.\n\nKey configuration: Qwen2.5-7B-Instruct served via vLLM (OpenAI-compatible server), temperature=0.6, max_model_len=3072. Same EnumAttack, same DeLex-JSON transformer, same evaluation protocol.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 8,
+    "category": "Optimization",
+    "title": "Optimize: Selective DeLex-JSON on Qwen2.5-7B-Instruct (Generalization)",
+    "description": "Optimize the main experiment 'Selective DeLex-JSON on Qwen2.5-7B-Instruct (Generalization)' to improve results.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 9,
+    "category": "Effectiveness Evaluation",
+    "title": "Success Criteria Evaluation for Selective DeLex-JSON",
+    "description": "Evaluate whether Selective DeLex-JSON achieves the three pre-registered success criteria. This item collects all experimental results from Main Experiments and Baseline Experiments, compares them, and provides an overall assessment of the idea's effectiveness.\n\nCriterion 1 (CDA Robustness): If baseline EnumAttack ASR ≥30% on HarmBench/StrongREJECT, Selective DeLex-JSON must reduce ASR to <10% absolute on the primary model (Llama-3.1-8B-Instruct).\nCriterion 2 (Utility Preservation): On JSONSchemaBench + IFEval(JSON), JSON validity and task scores do not degrade by more than ~2 percentage points vs. no defense, and benign schema modification rate stays ≤2%.\nCriterion 3 (Better Pareto Point): For similar ASR reduction, DeLex-JSON has lower benign rejection/modification costs than reject-only baselines.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 10,
+    "category": "Analysis Experiment",
+    "title": "Ablation Study: DeLex-JSON Component Contributions",
+    "description": "Ablation study to isolate the contribution of each component of Selective DeLex-JSON. Three variants are compared against the full method on the primary model (Llama-3.1-8B-Instruct):\n(1) Strip-Only: remove free-text schema fields (description, title, etc.) but do NOT delexicalize enum/const strings — tests whether the payload is in free-text metadata vs. forced literals.\n(2) Delex-All: replace ALL enum/const string literals with placeholders regardless of the suspicion function — tests the safety-utility tradeoff of blanket delexicalization.\n(3) Heuristic-Only (No Guard Model): use only the rule-based suspicion function without the optional Llama Guard safety classifier — tests whether the simple heuristics alone are sufficient.\nAll variants use the same EnumAttack on HarmBench (100 prompts) for safety evaluation and the same JSONSchemaBench subsets for utility evaluation.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 11,
+    "category": "Analysis Experiment",
+    "title": "Chunked-Payload Boundary Probe",
+    "description": "Probe the boundary conditions of Selective DeLex-JSON by testing a chunked-payload attack variant that distributes the harmful payload across many short enum values, each individually below the suspicion threshold. This tests whether an attacker can bypass the defense by splitting a long malicious literal into multiple short segments that individually appear benign. This is acknowledged as an out-of-scope threat for v1 but mapping the boundary is important for understanding the defense's limitations and informing future work.\n\nAttack construction: instead of a single long enum string containing the full harmful question + affirmative prefix, the attacker creates a schema with N fields, each having a short enum value (≤20 chars, no whitespace) that together reconstruct the payload when concatenated in the JSON output.",
+    "status": "pending",
+    "summary": ""
+  },
+  {
+    "index": 12,
+    "category": "Analysis Experiment",
+    "title": "Attack Success Correlation with Forced Literal Properties and Benign Schema Modification Distribution",
+    "description": "Two complementary analyses that provide deeper insight into the defense mechanism: (1) Correlation analysis between attack success and properties of the forced literal strings (length, whitespace content, instruction-like patterns) — this validates the hypothesis that contiguous natural-language literals in the autoregressive context are the mechanism enabling CDA. (2) Distribution analysis of benign schema modifications — characterizing what types of benign schemas are affected by DeLex-JSON and why, to inform practical deployment decisions.",
+    "status": "pending",
+    "summary": ""
+  }
+]

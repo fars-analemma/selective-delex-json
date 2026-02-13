@@ -1,0 +1,9 @@
+@misc{geng2025jsonschemabenchrigorousbenchmarkstructured,
+      title={JSONSchemaBench: A Rigorous Benchmark of Structured Outputs for Language Models}, 
+      author={Saibo Geng and Hudson Cooper and Michał Moskal and Samuel Jenkins and Julian Berman and Nathan Ranchin and Robert West and Eric Horvitz and Harsha Nori},
+      year={2025},
+      eprint={2501.10868},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2501.10868}, 
+}

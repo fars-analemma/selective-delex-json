@@ -1,0 +1,2 @@
+Activation steering
+Let h (ℓ) t ∈ R d denote the residual-stream representation at layer ℓ and token position t in a decoder-only transformer. Activation steering adds a vector v ∈ R d during inference: h(ℓ) t = h (ℓ) t + αv, (1) where α controls the intervention strength. This defines a steered next-token distribution p steer θ (• | x ≤t ) ̸ = p θ (• | x ≤t ) without changing model parameters.

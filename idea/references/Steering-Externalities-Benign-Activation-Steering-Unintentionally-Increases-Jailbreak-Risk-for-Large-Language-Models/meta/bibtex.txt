@@ -1,0 +1,5 @@
+@Inproceedings{Xiong2026SteeringEB,
+ author = {Chen Xiong and Zhiyuan He and Pin-Yu Chen and Ching-Yun Ko and Tsung-Yi Ho},
+ title = {Steering Externalities: Benign Activation Steering Unintentionally Increases Jailbreak Risk for Large Language Models},
+ year = {2026}
+}

@@ -1,0 +1,3 @@
+Grammar compilation time.
+Grammar compilation time.
+ There are notable differences in grammar compilation times between the engines. Both Guidance and Llamacpp dynamically compute their constraints during token generation leading to minimal grammar compilation time. In the middle XGrammar does include a non-trivial compilation step but they are able to largely mitigate its impact by running it concurrently with prompt pre-filling. Finally Outlines which converts JSON schemas into regular-expression based constraints has significantly higher compilation time.

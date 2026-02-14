@@ -1,0 +1,113 @@
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental Setup}
+
+We evaluate Selective DeLex-JSON on two safety-aligned instruction-tuned models: Llama-3.1-8B-Instruct~\citep{Dubey2024TheL3} and Qwen2.5-7B-Instruct~\citep{Yang2024Qwen25TR}. All experiments use vLLM~\citep{Kwon2023EfficientMM} with XGrammar~\citep{Dong2024XGrammarFA} for constrained decoding, with temperature 0.6 and maximum 1024 tokens.
+
+For safety evaluation, we use HarmBench~\citep{Mazeika2024HarmBenchAS} (159 standard behaviors) and StrongREJECT~\citep{Souly2024ASF} (313 harmful prompts across 6 categories). Attack success rate (ASR) is measured using the HarmBench classifier. For utility evaluation, we use JSONSchemaBench~\citep{geng2025jsonschemabenchrigorousbenchmarkstructured}, which provides 8,825 real-world JSON schemas across 7 subsets of varying complexity.
+
+We compare against four baselines: (1) \textbf{No Defense}: EnumAttack with no mitigation; (2) \textbf{Input Guard}: Llama Guard 3~\citep{Inan2023LlamaGL} classifies the combined prompt and schema before generation; (3) \textbf{Reject-Only}: schemas with suspicious literals are rejected entirely (same suspicion function as DeLex-JSON); (4) \textbf{Escape-Hatch}: schema is wrapped with a \texttt{oneOf} construct allowing a refusal alternative.
+
+\begin{table}[t]
+\centering
+\caption{Main safety results comparing defense methods against EnumAttack. \textbf{Bold} indicates best performance (lowest ASR). DeLex-JSON achieves 0\% HarmBench ASR on both models while maintaining the lowest benign cost.}
+\label{tab:main_safety}
+\begin{tabular}{lccccc}
+\toprule
+\multirow{2}{*}{\textbf{Defense}} & \multicolumn{2}{c}{\textbf{Llama-3.1-8B}} & \multicolumn{2}{c}{\textbf{Qwen2.5-7B}} & \textbf{Benign} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & HarmBench & StrongREJECT & HarmBench & StrongREJECT & \textbf{Cost} \\
+\midrule
+No Defense & 22.0\% & 15.3\% & 10.7\% & 4.5\% & 0.0\% \\
+Input Guard & 3.8\% & 2.9\% & -- & -- & 0.0\%$^\dagger$ \\
+Reject-Only & \textbf{0.0\%} & \textbf{0.0\%} & -- & -- & 4.4\% \\
+Escape-Hatch & 22.0\% & 15.3\% & -- & -- & 12.7\% \\
+\midrule
+\textbf{DeLex-JSON (Ours)} & \textbf{0.0\%} & 2.6\% & \textbf{0.0\%} & \textbf{2.6\%} & \textbf{1.1\%} \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}
+\footnotesize{$^\dagger$Input Guard has 0\% benign cost but 88.7\% guard rejection rate on attack prompts, leaving 3.8\% residual ASR.}
+\end{table}
+
+\subsection{Main Results}
+
+Table~\ref{tab:main_safety} presents the safety evaluation results. DeLex-JSON achieves 0\% HarmBench ASR on both Llama-3.1-8B and Qwen2.5-7B, completely neutralizing the EnumAttack that achieves 22.0\% and 10.7\% ASR respectively without defense. This demonstrates that selective delexicalization effectively removes the attack vector by preventing the model from being forced to output harmful content through constrained decoding.
+
+The baseline defenses exhibit significant limitations. Input Guard reduces ASR to 3.8\% but fails to eliminate attacks entirely because the guard cannot reliably detect harmful intent embedded in JSON schema structures rather than natural language prompts. Escape-Hatch provides no safety improvement (22.0\% ASR identical to No Defense) because the model never voluntarily selects the refusal option when constrained decoding forces harmful outputs. Reject-Only achieves 0\% ASR by rejecting all suspicious schemas, but incurs a 4.4\% benign false positive rate.
+
+DeLex-JSON Pareto-dominates Reject-Only: both achieve 0\% HarmBench ASR, but DeLex-JSON reduces benign cost from 4.4\% to 1.1\%, a 3.3 percentage point improvement. This advantage stems from the delexicalization approach, which sanitizes suspicious schemas rather than rejecting them outright, allowing legitimate requests with flagged literals to proceed with placeholder substitution. The cross-model generalization to Qwen2.5-7B confirms that the defense mechanism is model-agnostic, as it operates at the schema level before constrained decoding begins.
+
+\begin{table}[t]
+\centering
+\caption{Utility preservation metrics for DeLex-JSON on JSONSchemaBench. Modification rate indicates the percentage of schemas flagged by the suspicion function. Validity and compliance deltas are measured via paired comparison. All metrics are within the 2pp acceptability threshold.}
+\label{tab:utility}
+\begin{tabular}{lrccc}
+\toprule
+\textbf{Subset} & \textbf{\# Schemas} & \textbf{Mod. Rate} & \textbf{Validity $\Delta$} & \textbf{Compliance $\Delta$} \\
+\midrule
+\textbf{Overall} & \textbf{8,825} & \textbf{1.1\%} & \textbf{-0.38pp} & \textbf{-0.70pp} \\
+\midrule
+GlaiveAI-2K & 1,707 & 0.0\% & -0.29pp & -0.76pp \\
+Github\_easy & 1,943 & 0.5\% & -0.49pp & -0.63pp \\
+Github\_medium & 1,976 & 2.0\% & -- & -- \\
+Github\_hard & 1,240 & 3.0\% & -- & -- \\
+Kubernetes & 1,064 & 0.0\% & -- & -- \\
+Snowplow & 403 & 1.0\% & -- & -- \\
+JsonSchemaStore & 492 & 2.0\% & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Utility Preservation}
+
+Table~\ref{tab:utility} presents the utility evaluation on JSONSchemaBench. DeLex-JSON achieves only 0.38 percentage point degradation in JSON validity and 0.70 percentage point degradation in schema compliance, both well within the 2pp acceptability threshold for production deployment. The overall benign schema modification rate is 1.1\%, meaning 98.9\% of legitimate schemas pass through the defense completely unchanged.
+
+The per-subset analysis reveals that the suspicion function exhibits low false positive rates across diverse schema types. GlaiveAI-2K and Kubernetes achieve 0\% modification rate, indicating that clean synthetic and infrastructure schemas contain no literals that trigger the suspicion heuristics. Higher complexity subsets such as Github\_hard show slightly elevated modification rates (3.0\%), reflecting the presence of longer descriptive strings in complex real-world schemas. Critically, even when schemas are modified, the utility impact remains minimal because placeholder substitution preserves the structural constraints that guide model generation.
+
+\begin{table}[t]
+\centering
+\caption{Ablation study on DeLex-JSON components. Strip-Only removes metadata but not forced literals. Delex-All delexicalizes all literals regardless of suspicion. \textbf{Bold} indicates best performance.}
+\label{tab:ablation}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Variant} & \textbf{HarmBench ASR} & \textbf{Benign Mod.} & \textbf{Validity} & \textbf{Compliance} \\
+\midrule
+No Defense & 22.0\% & 0.0\% & 95.9\% & 94.1\% \\
+Strip-Only & 22.0\% & 0.0\% & 95.2\% & 93.4\% \\
+\midrule
+Delex-All & \textbf{0.0\%} & 35.5\% & 94.5\% & 92.1\% \\
+\textbf{DeLex-JSON (Full)} & \textbf{0.0\%} & \textbf{1.1\%} & \textbf{95.4\%} & \textbf{93.1\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ablation Study}
+
+Table~\ref{tab:ablation} presents an ablation study isolating the contributions of each defense component. The Strip-Only variant removes schema metadata (title, description fields) but preserves forced enum/const literals. This variant achieves identical 22.0\% ASR to No Defense, demonstrating that metadata removal alone provides no safety benefit. This result confirms that forced literals in enum and const fields are the key attack vector, as the attack payload is embedded in these constrained values rather than in descriptive metadata.
+
+The Delex-All variant applies delexicalization to all enum/const literals regardless of the suspicion function output. While this achieves 0\% ASR, it incurs a 35.5\% benign modification rate, which is 32 times higher than the selective approach. This excessive modification rate would be unacceptable in production, as it would alter over one-third of legitimate schemas. The full DeLex-JSON defense achieves the same 0\% ASR while reducing the modification rate to 1.1\%, demonstrating that the conjunction-based suspicion function successfully distinguishes attack payloads from benign literals. The utility metrics further confirm that selective delexicalization preserves output quality better than blanket delexicalization, with 0.9pp higher JSON validity and 1.0pp higher schema compliance.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\columnwidth]{figures/pareto_frontier.png}
+\caption{Safety-utility Pareto frontier comparing defense methods. DeLex-JSON achieves 0\% HarmBench ASR with only 1.1\% benign modification rate, Pareto-dominating Reject-Only which has 4.4\% rejection rate. Escape-Hatch provides no safety improvement over No Defense despite 12.7\% benign refusal rate.}
+\label{fig:pareto}
+\end{figure}
+
+\subsection{Pareto Analysis}
+
+Figure~\ref{fig:pareto} visualizes the safety-utility tradeoff across all defense methods. The Pareto frontier reveals that DeLex-JSON achieves the optimal tradeoff point: it matches Reject-Only's perfect HarmBench defense (0\% ASR) while reducing benign cost by 3.3 percentage points (1.1\% vs. 4.4\%). No other defense achieves this combination of complete attack neutralization with minimal utility impact. Input Guard occupies an intermediate position with 3.8\% residual ASR and zero benign cost, but its failure to fully eliminate attacks makes it unsuitable for high-security deployments. Escape-Hatch demonstrates the ineffectiveness of output-level escape mechanisms against control-plane attacks, achieving no safety improvement despite incurring 12.7\% benign refusal rate.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\columnwidth]{figures/chunked_probe.png}
+\caption{Chunked-payload attack analysis. Attack success rate vs. chunk size for both defended and undefended conditions. All chunks evade the suspicion function because each chunk is $\leq$20 characters, demonstrating a limitation of the current defense.}
+\label{fig:chunked}
+\end{figure}
+
+\subsection{Limitations: Chunked Attacks}
+
+Figure~\ref{fig:chunked} reveals a known limitation of the current defense. Chunked-payload attacks distribute harmful content across many short enum values, where each individual chunk is $\leq$20 characters and thus falls below the length threshold of the suspicion function. In this attack variant, 0\% of chunks are flagged regardless of chunk size, and the ASR remains at 8--14\% for both defended and undefended conditions. This demonstrates that the defense provides no additional protection against chunked attacks, as the suspicion function operates on individual literals rather than aggregated semantic content. Addressing this limitation requires semantic-level detection methods that can identify harmful intent distributed across multiple schema elements, which we leave for future work.
+

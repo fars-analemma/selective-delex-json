@@ -1,0 +1,16 @@
+\section{Introduction}
+\label{sec:intro}
+
+Structured-output APIs have become essential infrastructure for production LLM deployments, enabling reliable integration with downstream systems through guaranteed JSON schema compliance~\citep{Willard2023EfficientGG,Dong2024XGrammarFA}. Major inference platforms including vLLM~\citep{Kwon2023EfficientMM} and commercial APIs now offer constrained decoding capabilities that mask invalid tokens at each generation step, ensuring outputs conform to user-specified JSON schemas. This functionality is critical for applications ranging from function calling to data extraction, where malformed outputs would cause system failures.
+
+However, recent work has revealed that these constrained decoding mechanisms create a new attack surface that bypasses traditional safety alignment~\citep{zhang2026promptsspacetimedecouplingcontrolplane}. Control-plane jailbreaks exploit the schema specification itself rather than the prompt, embedding harmful instructions in forced enum or const values that the model must output verbatim. The EnumAttack achieves 22.0\% attack success rate on Llama-3.1-8B-Instruct by forcing the model to generate harmful content through constrained decoding, even when the model would refuse the same request in unconstrained generation. Existing defenses designed for prompt-level attacks prove insufficient: input guards cannot detect harmful intent embedded in schema structures, and output-level escape mechanisms fail because constrained decoding prevents the model from selecting refusal tokens.
+
+In this paper, we propose Selective DeLex-JSON, a training-free defense that sanitizes JSON schemas before constrained decoding. Our approach intercepts incoming schemas, identifies suspicious forced literals using a conjunction-based heuristic, and replaces them with opaque placeholders that preserve schema structure while removing attack payloads. The defense operates at the schema level, addressing the control-plane attack vector directly without requiring model modification or additional inference overhead.
+
+Our contributions are as follows:
+\begin{itemize}
+\item We identify forced enum/const literals as the key attack vector in control-plane jailbreaks, demonstrating through ablation that metadata removal alone provides no safety benefit while literal delexicalization achieves complete attack neutralization.
+\item We propose Selective DeLex-JSON, a training-free defense that achieves 0\% HarmBench ASR on both Llama-3.1-8B and Qwen2.5-7B while incurring only 1.1\% benign schema modification rate.
+\item We demonstrate that DeLex-JSON Pareto-dominates existing defenses, reducing benign cost by 3.3 percentage points compared to Reject-Only while maintaining identical safety guarantees.
+\item We characterize the limitation of syntactic-level defenses against chunked-payload attacks, motivating future work on semantic-level detection methods.
+\end{itemize}

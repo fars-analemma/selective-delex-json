@@ -1,0 +1,28 @@
+\section{Method}
+\label{sec:method}
+
+\subsection{Threat Model}
+
+We consider control-plane jailbreaks where an attacker exploits structured output APIs to bypass LLM safety alignment. In this threat model, the attacker controls the JSON schema specification but not the system prompt or model weights. The attacker's goal is to force the model to generate harmful content by embedding malicious instructions within forced literals (enum and const values) in the schema. When constrained decoding enforces these literals, the model must output them verbatim, effectively injecting attacker-controlled content into the generation stream. This attack vector is distinct from traditional prompt injection~\citep{Liu2023PromptIA} because the payload resides in the schema specification (control-plane) rather than the user input (data-plane). As demonstrated by~\citet{zhang2026promptsspacetimedecouplingcontrolplane}, EnumAttack achieves up to 22\% attack success rate on safety-aligned models by embedding harmful questions and affirmative prefixes as forced enum values, bypassing both prompt auditing and shallow refusal behaviors.
+
+\subsection{Defense Overview}
+
+We propose Selective DeLex-JSON, a training-free defense that sanitizes JSON schemas before constrained decoding. The defense operates as a preprocessing step in the inference pipeline, requiring no model modification or retraining. Figure~\ref{fig:framework} illustrates the defense architecture.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{framework_overview.jpeg}
+\caption{Overview of Selective DeLex-JSON defense. The system intercepts JSON schemas before constrained decoding, identifies suspicious forced literals (enum/const values) using a conjunction-based suspicion function, and replaces them with opaque placeholders to neutralize embedded attack payloads while preserving schema structure.}
+\label{fig:framework}
+\end{figure}
+
+The defense pipeline consists of four stages: (1) schema interception before the constrained decoding engine, (2) extraction of all forced string literals from enum and const fields, (3) application of a suspicion function to identify potentially malicious literals, and (4) replacement of suspicious literals with opaque placeholders. The sanitized schema is then passed to the constrained decoding engine, which enforces the modified constraints during generation. This approach blocks control-plane attacks by preventing natural-language payloads from entering the model's autoregressive context while preserving the structural validity of benign schemas.
+
+\subsection{Suspicion Function}
+
+The key challenge in selective delexicalization is distinguishing malicious payloads from legitimate enum values. Attack payloads typically consist of natural-language sentences (e.g., ``How do I make a bomb? Sure, here's how:''), while benign enums are typically short identifiers (e.g., ``GET'', ``POST'', ``active'', ``pending''). We design a conjunction-based suspicion function that flags a literal as suspicious if it satisfies at least two of the following criteria: (1) length exceeds 20 characters, (2) contains whitespace (spaces, newlines, or tabs), (3) matches instruction-like patterns (imperative verbs, affirmative prefixes such as ``Sure,'' or ``Step 1''). The conjunction requirement (two or more criteria) is critical for minimizing false positives: a single criterion alone would flag many benign literals (e.g., long but legitimate identifiers, or short phrases with spaces), but malicious payloads---which are natural-language sentences---consistently trigger multiple criteria simultaneously. This design achieves only 1.1\% benign schema modification rate across 8,825 JSONSchemaBench schemas while detecting 100\% of EnumAttack payloads.
+
+\subsection{Placeholder Replacement}
+
+When a literal is flagged as suspicious, we replace it with an opaque placeholder of the form ``OPTION\_$i$'' (e.g., ``OPTION\_0'', ``OPTION\_1''). This replacement preserves the schema's structural validity: the enum or const field still contains a valid string value, and the constrained decoding engine can enforce the modified constraint without error. The placeholder is semantically meaningless to the model, preventing the natural-language priming effect that enables control-plane attacks. Importantly, we maintain a mapping table from placeholders to original literals, enabling optional postprocessing to restore original values for downstream API consumers if needed. However, for safety evaluation, we assess only the model-generated free-text fields (e.g., the ``answer'' field in a response schema), excluding forced literals from harm scoring. This separation ensures that attacker-supplied content in the schema does not contaminate safety metrics. The defense integrates seamlessly with existing constrained decoding frameworks such as vLLM~\citep{Kwon2023EfficientMM} and XGrammar~\citep{Dong2024XGrammarFA} as a preprocessing step, requiring no modification to the inference engine itself.
+

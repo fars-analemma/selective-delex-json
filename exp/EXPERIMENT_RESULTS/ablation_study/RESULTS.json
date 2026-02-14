@@ -1,0 +1,46 @@
+{
+  "experiment": "ablation_study",
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "attack": "EnumAttack",
+  "safety_benchmark": "HarmBench (159 prompts)",
+  "utility_benchmark": "JSONSchemaBench (GlaiveAI-2K + Github_easy, ~3592 schemas)",
+  "fpr_benchmark": "JSONSchemaBench (all 7 subsets, 8825 schemas)",
+  "results": {
+    "no_defense": {
+      "harmbench_asr": 0.220,
+      "benign_modification_rate": 0.0,
+      "json_validity": 0.959,
+      "schema_compliance": 0.941
+    },
+    "full_delex_json": {
+      "harmbench_asr": 0.0,
+      "benign_modification_rate": 0.011,
+      "json_validity": 0.954,
+      "schema_compliance": 0.931
+    },
+    "strip_only": {
+      "harmbench_asr": 0.220,
+      "benign_modification_rate": 0.0,
+      "json_validity": 0.952,
+      "schema_compliance": 0.934
+    },
+    "delex_all": {
+      "harmbench_asr": 0.0,
+      "benign_modification_rate": 0.355,
+      "json_validity": 0.945,
+      "schema_compliance": 0.921
+    },
+    "heuristic_only": {
+      "harmbench_asr": 0.0,
+      "benign_modification_rate": 0.011,
+      "json_validity": 0.954,
+      "schema_compliance": 0.931,
+      "note": "identical to full DeLex-JSON"
+    }
+  },
+  "analysis": {
+    "strip_only_vs_full": "Strip-Only has same ASR as No Defense (22.0%), proving forced enum/const literals are the key attack vector. Metadata stripping alone is insufficient.",
+    "delex_all_vs_full": "Delex-All achieves 0% ASR but 35.5% benign modification rate (vs 1.1%) and lower utility (-0.9pp validity, -1.0pp compliance). Selective delexicalization preserves utility.",
+    "heuristic_only_vs_full": "Heuristic-Only is identical to Full DeLex-JSON. Rule-based heuristic alone is sufficient without guard model."
+  }
+}

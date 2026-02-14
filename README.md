@@ -242,3 +242,16 @@ Results: `results/no_defense_qwen25.json`, `results/delex_qwen25.json`, `results
 |-------|--------------|-------------|----------------|---------------|
 | Llama-3.1-8B-Instruct | 22.0% | 0.0% | 0.103 | 0.0016 |
 | Qwen2.5-7B-Instruct | 10.7% | 0.0% | 0.045 | 0.0016 |
+
+### Ablation Study: DeLex-JSON Component Contributions (Llama-3.1-8B-Instruct)
+
+| Variant | HarmBench ASR | Benign Mod Rate | JSON Validity | Schema Compliance |
+|---------|:---:|:---:|:---:|:---:|
+| No Defense | 22.0% | 0.0% | 95.9% | 94.1% |
+| **Full DeLex-JSON** | **0.0%** | **1.1%** | **95.4%** | **93.1%** |
+| Strip-Only | 22.0% | 0.0% | 95.2% | 93.4% |
+| Delex-All | 0.0% | 35.5% | 94.5% | 92.1% |
+| Heuristic-Only | 0.0% | 1.1% | 95.4% | 93.1% |
+
+Key findings: (1) Strip-Only has same ASR as no defense, proving forced literals are the attack vector. (2) Delex-All achieves 0% ASR but 35.5% benign modification rate (vs 1.1%), confirming selective delexicalization preserves utility. (3) Heuristic-Only is identical to full method, confirming rule-based heuristic suffices.
+Results: `results/ablation_summary.json`, `results/ablation_utility.json`, `EXPERIMENT_RESULTS/ablation_study/`

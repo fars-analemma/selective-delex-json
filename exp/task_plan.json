@@ -84,8 +84,8 @@
     "category": "Analysis Experiment",
     "title": "Ablation Study: DeLex-JSON Component Contributions",
     "description": "Ablation study to isolate the contribution of each component of Selective DeLex-JSON. Three variants are compared against the full method on the primary model (Llama-3.1-8B-Instruct):\n(1) Strip-Only: remove free-text schema fields (description, title, etc.) but do NOT delexicalize enum/const strings \u2014 tests whether the payload is in free-text metadata vs. forced literals.\n(2) Delex-All: replace ALL enum/const string literals with placeholders regardless of the suspicion function \u2014 tests the safety-utility tradeoff of blanket delexicalization.\n(3) Heuristic-Only (No Guard Model): use only the rule-based suspicion function without the optional Llama Guard safety classifier \u2014 tests whether the simple heuristics alone are sufficient.\nAll variants use the same EnumAttack on HarmBench (100 prompts) for safety evaluation and the same JSONSchemaBench subsets for utility evaluation.",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "Ablation study completed. Three variants evaluated on Llama-3.1-8B-Instruct: (1) Strip-Only: ASR=22.0% (same as no defense), proving forced literals are the key attack vector. (2) Delex-All: ASR=0.0% but 35.5% benign modification rate (vs 1.1% for full method), confirming selective delexicalization preserves more utility. (3) Heuristic-Only: identical to full DeLex-JSON (ASR=0.0%, FPR=1.1%, same utility), confirming rule-based heuristic alone is sufficient. Results in results/ablation_summary.json and EXPERIMENT_RESULTS/ablation_study/."
   },
   {
     "index": 11,

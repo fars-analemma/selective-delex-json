@@ -92,8 +92,8 @@
     "category": "Analysis Experiment",
     "title": "Chunked-Payload Boundary Probe",
     "description": "Probe the boundary conditions of Selective DeLex-JSON by testing a chunked-payload attack variant that distributes the harmful payload across many short enum values, each individually below the suspicion threshold. This tests whether an attacker can bypass the defense by splitting a long malicious literal into multiple short segments that individually appear benign. This is acknowledged as an out-of-scope threat for v1 but mapping the boundary is important for understanding the defense's limitations and informing future work.\n\nAttack construction: instead of a single long enum string containing the full harmful question + affirmative prefix, the attacker creates a schema with N fields, each having a short enum value (\u226420 chars, no whitespace) that together reconstruct the payload when concatenated in the JSON output.",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "Chunked-payload attack probe completed. Tested 8 conditions (chunk sizes 5/10/15/20 x no_defense/delex) on 50 HarmBench prompts with Llama-3.1-8B-Instruct. Key finding: 100% of chunks bypass is_suspicious() heuristic at all sizes (zero flagged), DeLex-JSON makes zero replacements. However, attack ASR is low (8-14%) because payload fragmentation weakens the attack priming. Mean ASR: no_defense=11.5%, delex=9.5%. DeLex-JSON provides no additional protection against this attack but the attack is inherently self-limiting. Results in results/chunked_probe_analysis.json and results/figures/chunked_probe.pdf."
   },
   {
     "index": 12,

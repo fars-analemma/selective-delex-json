@@ -255,3 +255,19 @@ Results: `results/no_defense_qwen25.json`, `results/delex_qwen25.json`, `results
 
 Key findings: (1) Strip-Only has same ASR as no defense, proving forced literals are the attack vector. (2) Delex-All achieves 0% ASR but 35.5% benign modification rate (vs 1.1%), confirming selective delexicalization preserves utility. (3) Heuristic-Only is identical to full method, confirming rule-based heuristic suffices.
 Results: `results/ablation_summary.json`, `results/ablation_utility.json`, `EXPERIMENT_RESULTS/ablation_study/`
+
+### Chunked-Payload Boundary Probe (Llama-3.1-8B-Instruct)
+
+| Condition | Chunk Size | ASR | Total Chunks | Flagged | Bypass Rate |
+|-----------|-----------|-----|-------------|---------|-------------|
+| No Defense | 5 | 14.0% | 1451 | 0 | 100% |
+| No Defense | 10 | 12.0% | 801 | 0 | 100% |
+| No Defense | 15 | 10.0% | 499 | 0 | 100% |
+| No Defense | 20 | 10.0% | 378 | 0 | 100% |
+| DeLex-JSON | 5 | 8.0% | 1451 | 0 | 100% |
+| DeLex-JSON | 10 | 8.0% | 801 | 0 | 100% |
+| DeLex-JSON | 15 | 14.0% | 499 | 0 | 100% |
+| DeLex-JSON | 20 | 8.0% | 378 | 0 | 100% |
+
+Key finding: 100% of chunks bypass `is_suspicious()` at all sizes. DeLex-JSON makes zero replacements. However, ASR is low (8-14%) because payload fragmentation weakens attack priming. This is an out-of-scope threat for v1 but maps the defense boundary.
+Attack: `attacks/chunked_enum_attack.py`, Results: `results/chunked_probe_analysis.json`, Plot: `results/figures/chunked_probe.pdf`, Report: `EXPERIMENT_RESULTS/chunked_probe/`

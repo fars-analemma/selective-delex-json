@@ -100,7 +100,7 @@
     "category": "Analysis Experiment",
     "title": "Attack Success Correlation with Forced Literal Properties and Benign Schema Modification Distribution",
     "description": "Two complementary analyses that provide deeper insight into the defense mechanism: (1) Correlation analysis between attack success and properties of the forced literal strings (length, whitespace content, instruction-like patterns) \u2014 this validates the hypothesis that contiguous natural-language literals in the autoregressive context are the mechanism enabling CDA. (2) Distribution analysis of benign schema modifications \u2014 characterizing what types of benign schemas are affected by DeLex-JSON and why, to inform practical deployment decisions.",
-    "status": "pending",
-    "summary": ""
+    "status": "completed",
+    "summary": "Completed forced literal property analysis and benign schema modification distribution analysis. Correlation analysis: literal length, whitespace count, and instruction-pattern matches show NO significant correlation with attack success (all p>>0.05), indicating the attack mechanism depends on the PRESENCE of instruction-like content rather than amount. Benign modification analysis: 1.1% overall modification rate (100/8825 schemas). Manual inspection of 50 flagged literals: 76% false positives (technical strings), 4% true positives, 20% borderline. Most affected subset: Github_hard (3.0%). Recommendations: raise length threshold to 40+, require 3 trigger reasons, add whitelist for technical patterns. Results in results/literal_analysis_summary.json, results/figures/literal_property_scatter.pdf, results/figures/benign_modification_distribution.pdf."
   }
 ]

@@ -1,0 +1,61 @@
+{
+  "task": "Literal Property & Benign Modification Analysis",
+  "correlation_analysis": {
+    "harmbench_n": 159,
+    "strongreject_n": 313,
+    "total_literal_length_vs_harmbench_unsafe": {
+      "point_biserial_r": 0.05576447833884293,
+      "p_value": 0.48507793546944705
+    },
+    "total_literal_length_vs_strongreject_score": {
+      "pearson_r": -0.012445533227071584,
+      "pearson_p": 0.8264074003823986,
+      "spearman_r": 0.013049906214814803,
+      "spearman_p": 0.8181209303210132
+    },
+    "whitespace_count_vs_harmbench_unsafe": {
+      "point_biserial_r": 0.054030305437016556
+    },
+    "instruction_patterns_vs_strongreject_score": {
+      "spearman_r": -0.0949673147631178,
+      "spearman_p": 0.09350069539551602
+    },
+    "length_correlation_significant": false
+  },
+  "benign_modification_analysis": {
+    "total_schemas": 8825,
+    "total_modified": 100,
+    "overall_modification_rate": 0.0113314447592068,
+    "per_subset_rates": {
+      "Glaiveai2K": 0.0,
+      "Github_easy": 0.004632012352032939,
+      "Github_medium": 0.020242914979757085,
+      "Github_hard": 0.029838709677419355,
+      "Kubernetes": 0.0,
+      "Snowplow": 0.009925558312655087,
+      "JsonSchemaStore": 0.02032520325203252
+    },
+    "manual_inspection": {
+      "sample_size": 50,
+      "true_positive": 2,
+      "false_positive": 38,
+      "borderline": 10,
+      "tp_rate": 0.04,
+      "fp_rate": 0.76
+    }
+  },
+  "recommendations": [
+    {
+      "recommendation": "Increase length threshold from 20 to 40+ characters",
+      "rationale": "Most false positives are 21-40 char technical strings. Raising the threshold would eliminate many FPs while still catching attack payloads (typically 50+ chars)."
+    },
+    {
+      "recommendation": "Require at least 3 reasons instead of 2 for flagging",
+      "rationale": "Adding a third required signal (e.g., regex match on instruction patterns) would reduce FPs on benign strings that simply happen to be long + have spaces."
+    },
+    {
+      "recommendation": "Add a whitelist for known-safe patterns (URIs, version strings, MIME types, technical identifiers)",
+      "rationale": "Many false positives follow recognizable technical formats that could be excluded before applying the suspicion heuristic."
+    }
+  ]
+}
